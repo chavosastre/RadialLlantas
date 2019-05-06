@@ -1,0 +1,49 @@
+/* Font families */
+/* ==== Google font ==== */
+@import url(https://fonts.googleapis.com/css?family=Open+Sans:400,300,700,600);
+@import url(https://fonts.googleapis.com/css?family=Montserrat);
+
+html {
+  min-height: 100%;
+  position: relative;
+}
+
+body{
+  font-family:'Montserrat', sans-serif;
+  padding-top: 10px;
+  background-color: #424242;
+  color: white;
+}
+
+
+p.titulo{
+  font-size: 4vw;
+  text-align: center;
+  font-weight: bold;
+  font-family:"Open Sans" !important;
+  text-shadow: -5px 5px 5px #FFDE00;
+}
+
+footer{
+  background: #424242;
+}
+
+.logotipo{
+  width: 100%;
+}
+
+table.centrar{
+  text-align: center;
+}
+
+th.borde{
+  border-right:  1px solid white;
+}
+
+td.borde{
+  border-right:  1px solid white;
+}
+
+div.espaciotop{
+  padding-top: 50px;
+}
