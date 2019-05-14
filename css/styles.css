@@ -20,6 +20,7 @@ p.titulo{
   font-size: 4vw;
   text-align: center;
   font-weight: bold;
+  color: white;
   font-family:"Open Sans" !important;
   text-shadow: -5px 5px 5px #FFDE00;
 }

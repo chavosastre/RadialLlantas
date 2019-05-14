@@ -10,23 +10,21 @@
 	<!-- Bootstrap core CSS-->
 	<link href="vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
 	<link href="css/styles.css" rel="stylesheet">
+	<link rel="stylesheet" type="text/css" href="css/util.css">
+	<link rel="stylesheet" type="text/css" href="css/main.css">
+	<link rel="stylesheet" type="text/css" href="css/styles.css">
 
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0/Chart.bundle.js"></script>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0/Chart.bundle.js"></script>
+
+
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+	<script src="js/acciones.js"></script>
+
 
 </head>
 
 <?php
-/* 
-* days_in_month($month, $year) 
-* Returns the number of days in a given month and year, taking into account leap years. 
-* 
-* $month: numeric month (integers 1-12) 
-* $year: numeric year (any integer) 
-* 
-* Prec: $month is an integer between 1 and 12, inclusive, and $year is an integer. 
-* Post: none 
-*/
 // corrected by ben at sparkyb dot net 
 function days_in_month($month, $year)
 {
@@ -55,9 +53,13 @@ function days_in_month($month, $year)
 	$diasMes = days_in_month($mes, $year);
 	// echo ("</br> mes ". $mes1);
 	?>
+	<div class="container-fluid text-right">
+		<button type="button" class="btn btn-light" onclick="window.print()">Imprimir Formato</button>
+	</div>
 	<div class="container-fluid">
 		<div class="container text-center">
 			<img class="logotipo" src="img/radial-logo.png" alt="">
+			<!-- <button type="button" class="btn btn-primary btn-lg imprimir">Imprimir</button> -->
 			<p class="titulo">Comparativa de Costos</p>
 		</div>
 
@@ -94,14 +96,6 @@ function days_in_month($month, $year)
 		// echo ("select Consumo, IdSucursal from produccion_radial where Fecha >= '".($year - 1)."-".($mes + 1)."-01' and Fecha <= '".($year)."-".($mes)."-01' ORDER BY Fecha, IdSucursal ASC");
 		$result = $conexion->query("select Consumo, IdSucursal, Fecha from produccion_radial where Fecha >= '" . ($year - 1) . "-" . ($mes + 1) . "-01' and Fecha <= '" . ($year) . "-" . ($mes) . "-01' ORDER BY Fecha, IdSucursal ASC");
 		$totalresult = $result->num_rows;
-		// echo("</br>".$totalresult);
-		// for ($x = 1; $x < $totalresult; $x++) {
-		// 	// echo("</br> entra al for </br>");
-		// 	$result->data_seek($x);
-		// 	$miFila = $result->fetch_assoc();
-		// 	$valorProduccion[$x - 1] = $miFila['Consumo'];
-		// 	echo ("</br>" .$x." - ". $valorProduccion[$x - 1]);
-		// }
 		$totalresult = $totalresult - 1;
 		for (($totalresult); $totalresult >= 0; $totalresult--) {
 			$result->data_seek($totalresult);
@@ -147,62 +141,154 @@ function days_in_month($month, $year)
 						<td>$
 							<?php
 							echo number_format((($valorProduccion[3] * $kwQROO) - ($valorProduccion[3] * $kwQROO * .15)) * 1.16);
+							$ahorroEdwiges[1] = ($valorProduccion[3] * $kwQROO * $iva) - ((($valorProduccion[3] * $kwQROO) - ($valorProduccion[3] * $kwQROO * .15)) * 1.16);
+								$ahorroMes[1] = $ahorroMes[1] + $ahorroEdwiges[1];
 							?>
 						</td>
 						<td><?php echo round($valorProduccion[8]) ?></td>
 						<td>$<?php echo number_format(round($valorProduccion[8] * $kwQROO * $iva, 2)) ?></td>
-						<td>$<?php echo number_format((($valorProduccion[8] * $kwQROO) - ($valorProduccion[8] * $kwQROO * .15)) * 1.16); ?></td>
+						<td>$
+							<?php 
+								echo number_format((($valorProduccion[8] * $kwQROO) - ($valorProduccion[8] * $kwQROO * .15)) * 1.16); 
+								$ahorroEdwiges[2] = ($valorProduccion[8] * $kwQROO * $iva) - ((($valorProduccion[8] * $kwQROO) - ($valorProduccion[8] * $kwQROO * .15)) * 1.16);
+								$ahorroMes[2] = $ahorroMes[2] + $ahorroEdwiges[2];
+							?>
+						</td>
 						<td><?php echo round($valorProduccion[13]) ?></td>
 						<td>$<?php echo number_format(round($valorProduccion[13] * $kwQROO * $iva, 2)) ?></td>
-						<td>$<?php echo number_format((($valorProduccion[13] * $kwQROO) - ($valorProduccion[13] * $kwQROO * .15)) * 1.16); ?></td>
+						<td>$
+							<?php 
+								echo number_format((($valorProduccion[13] * $kwQROO) - ($valorProduccion[13] * $kwQROO * .15)) * 1.16); 
+								$ahorroEdwiges[3] = ($valorProduccion[13] * $kwQROO * $iva) - ((($valorProduccion[13] * $kwQROO) - ($valorProduccion[13] * $kwQROO * .15)) * 1.16);
+								$ahorroMes[3] = $ahorroMes[3] + $ahorroEdwiges[3];
+							?>
+						</td>
 						<td><?php echo round($valorProduccion[18]) ?></td>
 						<td>$<?php echo number_format(round($valorProduccion[18] * $kwQROO * $iva, 2)) ?></td>
-						<td>$<?php echo number_format((($valorProduccion[18] * $kwQROO) - ($valorProduccion[18] * $kwQROO * .15)) * 1.16); ?></td>
+						<td>$
+							<?php 
+								echo number_format((($valorProduccion[18] * $kwQROO) - ($valorProduccion[18] * $kwQROO * .15)) * 1.16); 
+								$ahorroEdwiges[4] = ($valorProduccion[18] * $kwQROO * $iva) - ((($valorProduccion[18] * $kwQROO) - ($valorProduccion[18] * $kwQROO * .15)) * 1.16);
+								$ahorroMes[4] = $ahorroMes[4] + $ahorroEdwiges[4];
+							?>
+						</td>
 					</tr>
 					<tr>
 						<td>Av. Patria</td>
 						<td><?php echo round($valorProduccion[4]) ?></td>
 						<td>$<?php echo number_format(round($valorProduccion[4] * $kwQROO * $iva, 2)) ?></td>
-						<td>$<?php echo number_format((($valorProduccion[4] * $kwQROO) - ($valorProduccion[4] * $kwQROO * .15)) * 1.16); ?></td>
+						<td>$
+							<?php 
+								echo number_format((($valorProduccion[4] * $kwQROO) - ($valorProduccion[4] * $kwQROO * .15)) * 1.16); 
+								$ahorroPatria[1] = ($valorProduccion[4] * $kwQROO * $iva) - ((($valorProduccion[4] * $kwQROO) - ($valorProduccion[4] * $kwQROO * .15)) * 1.16);
+								$ahorroMes[1] = $ahorroMes[1] + $ahorroPatria[1];
+							?>
+						</td>
 						<td><?php echo round($valorProduccion[9]) ?></td>
 						<td>$<?php echo number_format(round($valorProduccion[9] * $kwQROO * $iva, 2)) ?></td>
-						<td>$<?php echo number_format((($valorProduccion[9] * $kwQROO) - ($valorProduccion[9] * $kwQROO * .15)) * 1.16); ?></td>
+						<td>$
+							<?php 
+								echo number_format((($valorProduccion[9] * $kwQROO) - ($valorProduccion[9] * $kwQROO * .15)) * 1.16); 
+								$ahorroPatria[2] = ($valorProduccion[9] * $kwQROO * $iva) - ((($valorProduccion[9] * $kwQROO) - ($valorProduccion[9] * $kwQROO * .15)) * 1.16);
+								$ahorroMes[2] = $ahorroMes[2] + $ahorroPatria[2];
+							?>
+						</td>
 						<td><?php echo round($valorProduccion[14]) ?></td>
 						<td>$<?php echo number_format(round($valorProduccion[14] * $kwQROO * $iva, 2)) ?></td>
-						<td>$<?php echo number_format((($valorProduccion[14] * $kwQROO) - ($valorProduccion[14] * $kwQROO * .15)) * 1.16); ?></td>
+						<td>$
+							<?php 
+								echo number_format((($valorProduccion[14] * $kwQROO) - ($valorProduccion[14] * $kwQROO * .15)) * 1.16); 
+								$ahorroPatria[3] = ($valorProduccion[14] * $kwQROO * $iva) - ((($valorProduccion[14] * $kwQROO) - ($valorProduccion[14] * $kwQROO * .15)) * 1.16);
+								$ahorroMes[3] = $ahorroMes[3] + $ahorroPatria[3];
+							?>
+						</td>
 						<td><?php echo round($valorProduccion[19]) ?></td>
 						<td>$<?php echo number_format(round($valorProduccion[19] * $kwQROO * $iva, 2)) ?></td>
-						<td>$<?php echo number_format((($valorProduccion[19] * $kwQROO) - ($valorProduccion[19] * $kwQROO * .15)) * 1.16); ?></td>
+						<td>$
+							<?php 
+								echo number_format((($valorProduccion[19] * $kwQROO) - ($valorProduccion[19] * $kwQROO * .15)) * 1.16); 
+								$ahorroPatria[4] = ($valorProduccion[19] * $kwQROO * $iva) - ((($valorProduccion[19] * $kwQROO) - ($valorProduccion[19] * $kwQROO * .15)) * 1.16);
+								$ahorroMes[4] = $ahorroMes[4] + $ahorroPatria[4];
+							?>
+						</td>
 					</tr>
 					<tr>
 						<td>Tránsito</td>
 						<td><?php echo round($valorProduccion[2]) ?></td>
 						<td>$<?php echo number_format(round($valorProduccion[2] * $kwQROO * $iva, 2)) ?></td>
-						<td>$<?php echo number_format((($valorProduccion[2] * $kwQROO) - ($valorProduccion[2] * $kwQROO * .15)) * 1.16); ?></td>
+						<td>$
+							<?php 
+								echo number_format((($valorProduccion[2] * $kwQROO) - ($valorProduccion[2] * $kwQROO * .15)) * 1.16); 
+								$ahorroTransito[1] = ($valorProduccion[2] * $kwQROO * $iva) - ((($valorProduccion[2] * $kwQROO) - ($valorProduccion[2] * $kwQROO * .15)) * 1.16);
+								$ahorroMes[1] = $ahorroMes[1] + $ahorroTransito[1];
+							?>
+						</td>
 						<td><?php echo round($valorProduccion[7]) ?></td>
 						<td>$<?php echo number_format(round($valorProduccion[7] * $kwQROO * $iva, 2)) ?></td>
-						<td>$<?php echo number_format((($valorProduccion[7] * $kwQROO) - ($valorProduccion[7] * $kwQROO * .15)) * 1.16); ?></td>
+						<td>$
+							<?php 
+								echo number_format((($valorProduccion[7] * $kwQROO) - ($valorProduccion[7] * $kwQROO * .15)) * 1.16); 
+								$ahorroTransito[2] = ($valorProduccion[7] * $kwQROO * $iva) - ((($valorProduccion[7] * $kwQROO) - ($valorProduccion[7] * $kwQROO * .15)) * 1.16);
+								$ahorroMes[2] = $ahorroMes[2] + $ahorroTransito[2];
+							?>
+						</td>
 						<td><?php echo round($valorProduccion[12]) ?></td>
 						<td>$<?php echo number_format(round($valorProduccion[12] * $kwQROO * $iva, 2)) ?></td>
-						<td>$<?php echo number_format((($valorProduccion[12] * $kwQROO) - ($valorProduccion[12] * $kwQROO * .15)) * 1.16); ?></td>
+						<td>$
+							<?php 
+								echo number_format((($valorProduccion[12] * $kwQROO) - ($valorProduccion[12] * $kwQROO * .15)) * 1.16); 
+								$ahorroTransito[3] = ($valorProduccion[12] * $kwQROO * $iva) - ((($valorProduccion[12] * $kwQROO) - ($valorProduccion[12] * $kwQROO * .15)) * 1.16);
+								$ahorroMes[3] = $ahorroMes[3] + $ahorroTransito[3];
+							?>
+						</td>
 						<td><?php echo round($valorProduccion[17]) ?></td>
 						<td>$<?php echo number_format(round($valorProduccion[17] * $kwQROO * $iva, 2)) ?></td>
-						<td>$<?php echo number_format((($valorProduccion[17] * $kwQROO) - ($valorProduccion[17] * $kwQROO * .15)) * 1.16); ?></td>
+						<td>$
+							<?php 
+								echo number_format((($valorProduccion[17] * $kwQROO) - ($valorProduccion[17] * $kwQROO * .15)) * 1.16); 
+								$ahorroTransito[4] = ($valorProduccion[17] * $kwQROO * $iva) - ((($valorProduccion[17] * $kwQROO) - ($valorProduccion[17] * $kwQROO * .15)) * 1.16);
+								$ahorroMes[4] = $ahorroMes[4] + $ahorroTransito[4];
+							?>
+						</td>
 					</tr>
 					<tr>
 						<td>Fco. de Montejo</td>
 						<td><?php echo round($valorProduccion[1]) ?></td>
 						<td>$<?php echo number_format(round($valorProduccion[1] * $kwQROO * $iva, 2)) ?></td>
-						<td>$<?php echo number_format((($valorProduccion[1] * $kwQROO) - ($valorProduccion[1] * $kwQROO * .15)) * 1.16); ?></td>
+						<td>$
+							<?php 
+								echo number_format((($valorProduccion[1] * $kwQROO) - ($valorProduccion[1] * $kwQROO * .15)) * 1.16); 
+								$ahorroMontejo[1] = ($valorProduccion[1] * $kwQROO * $iva) - ((($valorProduccion[1] * $kwQROO) - ($valorProduccion[1] * $kwQROO * .15)) * 1.16);
+								$ahorroMes[1] = $ahorroMes[1] + $ahorroMontejo[1];
+							?>
+						</td>
 						<td><?php echo round($valorProduccion[6]) ?></td>
 						<td>$<?php echo number_format(round($valorProduccion[6] * $kwQROO * $iva, 2)) ?></td>
-						<td>$<?php echo number_format((($valorProduccion[6] * $kwQROO) - ($valorProduccion[6] * $kwQROO * .15)) * 1.16); ?></td>
+						<td>$
+							<?php 
+								echo number_format((($valorProduccion[6] * $kwQROO) - ($valorProduccion[6] * $kwQROO * .15)) * 1.16); 
+								$ahorroMontejo[2] = ($valorProduccion[6] * $kwQROO * $iva) - ((($valorProduccion[6] * $kwQROO) - ($valorProduccion[6] * $kwQROO * .15)) * 1.16);
+								$ahorroMes[2] = $ahorroMes[2] + $ahorroMontejo[2];
+							?>
+						</td>
 						<td><?php echo round($valorProduccion[11]) ?></td>
 						<td>$<?php echo number_format(round($valorProduccion[11] * $kwQROO * $iva, 2)) ?></td>
-						<td>$<?php echo number_format((($valorProduccion[11] * $kwQROO) - ($valorProduccion[11] * $kwQROO * .15)) * 1.16); ?></td>
+						<td>$
+							<?php 
+								echo number_format((($valorProduccion[11] * $kwQROO) - ($valorProduccion[11] * $kwQROO * .15)) * 1.16); 
+								$ahorroMontejo[3] = ($valorProduccion[11] * $kwQROO * $iva) - ((($valorProduccion[11] * $kwQROO) - ($valorProduccion[11] * $kwQROO * .15)) * 1.16);
+								$ahorroMes[3] = $ahorroMes[3] + $ahorroMontejo[3];
+							?>
+						</td>
 						<td><?php echo round($valorProduccion[16]) ?></td>
 						<td>$<?php echo number_format(round($valorProduccion[16] * $kwQROO * $iva, 2)) ?></td>
-						<td>$<?php echo number_format((($valorProduccion[16] * $kwQROO) - ($valorProduccion[16] * $kwQROO * .15)) * 1.16); ?></td>
+						<td>$
+							<?php 
+								echo number_format((($valorProduccion[16] * $kwQROO) - ($valorProduccion[16] * $kwQROO * .15)) * 1.16); 
+								$ahorroMontejo[4] = ($valorProduccion[16] * $kwQROO * $iva) - ((($valorProduccion[16] * $kwQROO) - ($valorProduccion[16] * $kwQROO * .15)) * 1.16);
+								$ahorroMes[4] = $ahorroMes[4] + $ahorroMontejo[4];
+							?>
+						</td>
 					</tr>
 					<tr>
 						<td>Playa del Carmen</td>
@@ -282,46 +368,118 @@ function days_in_month($month, $year)
 						<td>Edwiges</td>
 						<td><?php echo round($valorProduccion[23]) ?></td>
 						<td>$<?php echo number_format(round($valorProduccion[23] * $kwQROO * $iva, 2)) ?></td>
-						<td>$<?php echo number_format((($valorProduccion[23] * $kwQROO) - ($valorProduccion[23] * $kwQROO * .15)) * 1.16); ?></td>
+						<td>$
+							<?php 
+								echo number_format((($valorProduccion[23] * $kwQROO) - ($valorProduccion[23] * $kwQROO * .15)) * 1.16); 
+								$ahorroEdwiges[5] = ($valorProduccion[23] * $kwQROO * $iva) - ((($valorProduccion[23] * $kwQROO) - ($valorProduccion[23] * $kwQROO * .15)) * 1.16);
+								$ahorroMes[5] = $ahorroMes[5] + $ahorroEdwiges[5];
+							?>
+						</td>
 						<td><?php echo round($valorProduccion[28]) ?></td>
 						<td>$<?php echo number_format(round($valorProduccion[28] * $kwQROO * $iva, 2)) ?></td>
-						<td>$<?php echo number_format((($valorProduccion[28] * $kwQROO) - ($valorProduccion[28] * $kwQROO * .15)) * 1.16); ?></td>
+						<td>$
+							<?php 
+								echo number_format((($valorProduccion[28] * $kwQROO) - ($valorProduccion[28] * $kwQROO * .15)) * 1.16); 
+								$ahorroEdwiges[6] = ($valorProduccion[28] * $kwQROO * $iva) - ((($valorProduccion[28] * $kwQROO) - ($valorProduccion[28] * $kwQROO * .15)) * 1.16);
+								$ahorroMes[6] = $ahorroMes[6] + $ahorroEdwiges[6];
+							?>
+						</td>
 						<td><?php echo round($valorProduccion[33]) ?></td>
 						<td>$<?php echo number_format(round($valorProduccion[33] * $kwQROO * $iva, 2)) ?></td>
-						<td>$<?php echo number_format((($valorProduccion[33] * $kwQROO) - ($valorProduccion[33] * $kwQROO * .15)) * 1.16); ?></td>
+						<td>$
+							<?php 
+								echo number_format((($valorProduccion[33] * $kwQROO) - ($valorProduccion[33] * $kwQROO * .15)) * 1.16); 
+								$ahorroEdwiges[7] = ($valorProduccion[33] * $kwQROO * $iva) - ((($valorProduccion[33] * $kwQROO) - ($valorProduccion[33] * $kwQROO * .15)) * 1.16);
+								$ahorroMes[7] = $ahorroMes[7] + $ahorroEdwiges[7];
+							?>
+						</td>
 						<td><?php echo round($valorProduccion[38]) ?></td>
 						<td>$<?php echo number_format(round($valorProduccion[38] * $kwQROO * $iva, 2)) ?></td>
-						<td>$<?php echo number_format((($valorProduccion[38] * $kwQROO) - ($valorProduccion[38] * $kwQROO * .15)) * 1.16); ?></td>
+						<td>$
+							<?php 
+								echo number_format((($valorProduccion[38] * $kwQROO) - ($valorProduccion[38] * $kwQROO * .15)) * 1.16); 
+								$ahorroEdwiges[8] = ($valorProduccion[38] * $kwQROO * $iva) - ((($valorProduccion[38] * $kwQROO) - ($valorProduccion[38] * $kwQROO * .15)) * 1.16);
+								$ahorroMes[8] = $ahorroMes[8] + $ahorroEdwiges[8];
+							?>
+						</td>
 					</tr>
 					<tr>
 						<td>Av. Patria</td>
 						<td><?php echo round($valorProduccion[24]) ?></td>
 						<td>$<?php echo number_format(round($valorProduccion[24] * $kwQROO * $iva, 2)) ?></td>
-						<td>$<?php echo number_format((($valorProduccion[24] * $kwQROO) - ($valorProduccion[24] * $kwQROO * .15)) * 1.16); ?></td>
+						<td>$
+							<?php 
+								echo number_format((($valorProduccion[24] * $kwQROO) - ($valorProduccion[24] * $kwQROO * .15)) * 1.16); 
+								$ahorroPatria[5] = ($valorProduccion[24] * $kwQROO * $iva) - ((($valorProduccion[24] * $kwQROO) - ($valorProduccion[24] * $kwQROO * .15)) * 1.16);
+								$ahorroMes[5] = $ahorroMes[5] + $ahorroPatria[5];
+							?>
+						</td>
 						<td><?php echo round($valorProduccion[29]) ?></td>
 						<td>$<?php echo number_format(round($valorProduccion[29] * $kwQROO * $iva, 2)) ?></td>
-						<td>$<?php echo number_format((($valorProduccion[29] * $kwQROO) - ($valorProduccion[29] * $kwQROO * .15)) * 1.16); ?></td>
+						<td>$
+							<?php 
+								echo number_format((($valorProduccion[29] * $kwQROO) - ($valorProduccion[29] * $kwQROO * .15)) * 1.16); 
+								$ahorroPatria[6] = ($valorProduccion[29] * $kwQROO * $iva) - ((($valorProduccion[29] * $kwQROO) - ($valorProduccion[29] * $kwQROO * .15)) * 1.16);
+								$ahorroMes[6] = $ahorroMes[6] + $ahorroPatria[6];
+							?>
+						</td>
 						<td><?php echo round($valorProduccion[34]) ?></td>
 						<td>$<?php echo number_format(round($valorProduccion[34] * $kwQROO * $iva, 2)) ?></td>
-						<td>$<?php echo number_format((($valorProduccion[34] * $kwQROO) - ($valorProduccion[34] * $kwQROO * .15)) * 1.16); ?></td>
+						<td>$
+							<?php 
+								echo number_format((($valorProduccion[34] * $kwQROO) - ($valorProduccion[34] * $kwQROO * .15)) * 1.16); 
+								$ahorroPatria[7] = ($valorProduccion[34] * $kwQROO * $iva) - ((($valorProduccion[34] * $kwQROO) - ($valorProduccion[34] * $kwQROO * .15)) * 1.16);
+								$ahorroMes[7] = $ahorroMes[7] + $ahorroPatria[7];
+							?>
+						</td>
 						<td><?php echo round($valorProduccion[39]) ?></td>
 						<td>$<?php echo number_format(round($valorProduccion[39] * $kwQROO * $iva, 2)) ?></td>
-						<td>$<?php echo number_format((($valorProduccion[39] * $kwQROO) - ($valorProduccion[39] * $kwQROO * .15)) * 1.16); ?></td>
+						<td>$
+							<?php 
+								echo number_format((($valorProduccion[39] * $kwQROO) - ($valorProduccion[39] * $kwQROO * .15)) * 1.16); 
+								$ahorroPatria[8] = ($valorProduccion[39] * $kwQROO * $iva) - ((($valorProduccion[39] * $kwQROO) - ($valorProduccion[39] * $kwQROO * .15)) * 1.16);
+								$ahorroMes[8] = $ahorroMes[8] + $ahorroPatria[8];
+							?>
+						</td>
 					</tr>
 					<tr>
 						<td>Tránsito</td>
 						<td><?php echo round($valorProduccion[22]) ?></td>
 						<td>$<?php echo number_format(round($valorProduccion[22] * $kwQROO * $iva, 2)) ?></td>
-						<td>$<?php echo number_format((($valorProduccion[22] * $kwQROO) - ($valorProduccion[22] * $kwQROO * .15)) * 1.16); ?></td>
+						<td>$
+							<?php 
+								echo number_format((($valorProduccion[22] * $kwQROO) - ($valorProduccion[22] * $kwQROO * .15)) * 1.16); 
+								$ahorroTransito[5] = ($valorProduccion[22] * $kwQROO * $iva) - ((($valorProduccion[22] * $kwQROO) - ($valorProduccion[22] * $kwQROO * .15)) * 1.16);
+								$ahorroMes[5] = $ahorroMes[5] + $ahorroTransito[5];
+							?>
+						</td>
 						<td><?php echo round($valorProduccion[27]) ?></td>
 						<td>$<?php echo number_format(round($valorProduccion[27] * $kwQROO * $iva, 2)) ?></td>
-						<td>$<?php echo number_format((($valorProduccion[27] * $kwQROO) - ($valorProduccion[27] * $kwQROO * .15)) * 1.16); ?></td>
+						<td>$
+							<?php 
+								echo number_format((($valorProduccion[27] * $kwQROO) - ($valorProduccion[27] * $kwQROO * .15)) * 1.16); 
+								$ahorroTransito[6] = ($valorProduccion[27] * $kwQROO * $iva) - ((($valorProduccion[27] * $kwQROO) - ($valorProduccion[27] * $kwQROO * .15)) * 1.16);
+								$ahorroMes[6] = $ahorroMes[6] + $ahorroTransito[6];
+							?>
+						</td>
 						<td><?php echo round($valorProduccion[32]) ?></td>
 						<td>$<?php echo number_format(round($valorProduccion[32] * $kwQROO * $iva, 2)) ?></td>
-						<td>$<?php echo number_format((($valorProduccion[32] * $kwQROO) - ($valorProduccion[32] * $kwQROO * .15)) * 1.16); ?></td>
+						<td>$
+							<?php 
+								echo number_format((($valorProduccion[32] * $kwQROO) - ($valorProduccion[32] * $kwQROO * .15)) * 1.16); 
+								$ahorroTransito[7] = ($valorProduccion[32] * $kwQROO * $iva) - ((($valorProduccion[32] * $kwQROO) - ($valorProduccion[32] * $kwQROO * .15)) * 1.16);
+								$ahorroMes[7] = $ahorroMes[7] + $ahorroTransito[7];
+							?>
+						</td>
 						<td><?php echo round($valorProduccion[37]) ?></td>
 						<td>$<?php echo number_format(round($valorProduccion[37] * $kwQROO * $iva, 2)) ?></td>
-						<td>$<?php echo number_format((($valorProduccion[37] * $kwQROO) - ($valorProduccion[37] * $kwQROO * .15)) * 1.16); ?></td>
+						<td>$
+							<?php 
+								echo number_format((($valorProduccion[37] * $kwQROO) - ($valorProduccion[37] * $kwQROO * .15)) * 1.16); 
+								$ahorroTransito[8] = ($valorProduccion[37] * $kwQROO * $iva) - ((($valorProduccion[37] * $kwQROO) - ($valorProduccion[37] * $kwQROO * .15)) * 1.16);
+								$ahorroMes[8] = $ahorroMes[8] + $ahorroTransito[8];
+							?>
+						</td>
 					</tr>
 					<tr>
 						<td>Fco. de Montejo</td>
@@ -381,7 +539,8 @@ function days_in_month($month, $year)
 								$ahorroPlaya[6] = ($valorProduccion[25] * $kwQROO * $iva) - ((($valorProduccion[25] * $kwQROO) - ($valorProduccion[25] * $kwQROO * .15)) * 1.16);
 								$ahorroMes[6] = $ahorroMes[6] + $ahorroPlaya[6];
 
-							?>						</td>
+							?>
+						</td>
 						<td><?php echo round($valorProduccion[30]) ?></td>
 						<td>$<?php echo number_format(round($valorProduccion[30] * $kwQROO * $iva, 2)) ?></td>
 						<td>$
@@ -439,46 +598,118 @@ function days_in_month($month, $year)
 						<td>Edwiges</td>
 						<td><?php echo round($valorProduccion[43]) ?></td>
 						<td>$<?php echo number_format(round($valorProduccion[43] * $kwQROO * $iva, 2)) ?></td>
-						<td>$<?php echo number_format((($valorProduccion[43] * $kwQROO) - ($valorProduccion[43] * $kwQROO * .15)) * 1.16); ?></td>
+						<td>$
+							<?php 
+								echo number_format((($valorProduccion[43] * $kwQROO) - ($valorProduccion[43] * $kwQROO * .15)) * 1.16); 
+								$ahorroEdwiges[9] = ($valorProduccion[43] * $kwQROO * $iva) - ((($valorProduccion[43] * $kwQROO) - ($valorProduccion[43] * $kwQROO * .15)) * 1.16);
+								$ahorroMes[9] = $ahorroMes[9] + $ahorroEdwiges[9];
+							?>
+						</td>
 						<td><?php echo round($valorProduccion[48]) ?></td>
 						<td>$<?php echo number_format(round($valorProduccion[48] * $kwQROO * $iva, 2)) ?></td>
-						<td>$<?php echo number_format((($valorProduccion[48] * $kwQROO) - ($valorProduccion[48] * $kwQROO * .15)) * 1.16); ?></td>
+						<td>$
+							<?php 
+								echo number_format((($valorProduccion[48] * $kwQROO) - ($valorProduccion[48] * $kwQROO * .15)) * 1.16); 
+								$ahorroEdwiges[10] = ($valorProduccion[48] * $kwQROO * $iva) - ((($valorProduccion[48] * $kwQROO) - ($valorProduccion[48] * $kwQROO * .15)) * 1.16);
+								$ahorroMes[10] = $ahorroMes[10] + $ahorroEdwiges[10];
+							?>
+						</td>
 						<td><?php echo round($valorProduccion[53]) ?></td>
 						<td>$<?php echo number_format(round($valorProduccion[53] * $kwQROO * $iva, 2)) ?></td>
-						<td>$<?php echo number_format((($valorProduccion[53] * $kwQROO) - ($valorProduccion[53] * $kwQROO * .15)) * 1.16); ?></td>
+						<td>$
+							<?php 
+								echo number_format((($valorProduccion[53] * $kwQROO) - ($valorProduccion[53] * $kwQROO * .15)) * 1.16); 
+								$ahorroEdwiges[11] = ($valorProduccion[53] * $kwQROO * $iva) - ((($valorProduccion[53] * $kwQROO) - ($valorProduccion[53] * $kwQROO * .15)) * 1.16);
+								$ahorroMes[11] = $ahorroMes[11] + $ahorroEdwiges[11];
+							?>
+						</td>
 						<td><?php echo round($valorProduccion[58]) ?></td>
 						<td>$<?php echo number_format(round($valorProduccion[58] * $kwQROO * $iva, 2)) ?></td>
-						<td>$<?php echo number_format((($valorProduccion[58] * $kwQROO) - ($valorProduccion[58] * $kwQROO * .15)) * 1.16); ?></td>
+						<td>$
+							<?php 
+								echo number_format((($valorProduccion[58] * $kwQROO) - ($valorProduccion[58] * $kwQROO * .15)) * 1.16); 
+								$ahorroEdwiges[12] = ($valorProduccion[58] * $kwQROO * $iva) - ((($valorProduccion[58] * $kwQROO) - ($valorProduccion[58] * $kwQROO * .15)) * 1.16);
+								$ahorroMes[12] = $ahorroMes[12] + $ahorroEdwiges[12];
+							?>
+						</td>
 					</tr>
 					<tr>
 						<td>Av. Patria</td>
 						<td><?php echo round($valorProduccion[44]) ?></td>
 						<td>$<?php echo number_format(round($valorProduccion[44] * $kwQROO * $iva, 2)) ?></td>
-						<td>$<?php echo number_format((($valorProduccion[44] * $kwQROO) - ($valorProduccion[44] * $kwQROO * .15)) * 1.16); ?></td>
+						<td>$
+							<?php 
+								echo number_format((($valorProduccion[44] * $kwQROO) - ($valorProduccion[44] * $kwQROO * .15)) * 1.16); 
+								$ahorroPatria[9] = ($valorProduccion[44] * $kwQROO * $iva) - ((($valorProduccion[44] * $kwQROO) - ($valorProduccion[44] * $kwQROO * .15)) * 1.16);
+								$ahorroMes[9] = $ahorroMes[9] + $ahorroPatria[9];
+							?>
+						</td>
 						<td><?php echo round($valorProduccion[49]) ?></td>
 						<td>$<?php echo number_format(round($valorProduccion[49] * $kwQROO * $iva, 2)) ?></td>
-						<td>$<?php echo number_format((($valorProduccion[49] * $kwQROO) - ($valorProduccion[49] * $kwQROO * .15)) * 1.16); ?></td>
+						<td>$
+							<?php 
+								echo number_format((($valorProduccion[49] * $kwQROO) - ($valorProduccion[49] * $kwQROO * .15)) * 1.16); 
+								$ahorroPatria[10] = ($valorProduccion[49] * $kwQROO * $iva) - ((($valorProduccion[49] * $kwQROO) - ($valorProduccion[49] * $kwQROO * .15)) * 1.16);
+								$ahorroMes[10] = $ahorroMes[10] + $ahorroPatria[10];
+							?>
+						</td>
 						<td><?php echo round($valorProduccion[54]) ?></td>
 						<td>$<?php echo number_format(round($valorProduccion[54] * $kwQROO * $iva, 2)) ?></td>
-						<td>$<?php echo number_format((($valorProduccion[54] * $kwQROO) - ($valorProduccion[54] * $kwQROO * .15)) * 1.16); ?></td>
+						<td>$
+							<?php 
+								echo number_format((($valorProduccion[54] * $kwQROO) - ($valorProduccion[54] * $kwQROO * .15)) * 1.16); 
+								$ahorroPatria[11] = ($valorProduccion[54] * $kwQROO * $iva) - ((($valorProduccion[54] * $kwQROO) - ($valorProduccion[54] * $kwQROO * .15)) * 1.16);
+								$ahorroMes[11] = $ahorroMes[11] + $ahorroPatria[11];
+							?>
+						</td>
 						<td><?php echo round($valorProduccion[59]) ?></td>
 						<td>$<?php echo number_format(round($valorProduccion[59] * $kwQROO * $iva, 2)) ?></td>
-						<td>$<?php echo number_format((($valorProduccion[59] * $kwQROO) - ($valorProduccion[59] * $kwQROO * .15)) * 1.16); ?></td>
+						<td>$
+							<?php 
+								echo number_format((($valorProduccion[59] * $kwQROO) - ($valorProduccion[59] * $kwQROO * .15)) * 1.16); 
+								$ahorroPatria[12] = ($valorProduccion[59] * $kwQROO * $iva) - ((($valorProduccion[59] * $kwQROO) - ($valorProduccion[59] * $kwQROO * .15)) * 1.16);
+								$ahorroMes[12] = $ahorroMes[12] + $ahorroPatria[12];
+							?>
+						</td>
 					</tr>
 					<tr>
 						<td>Tránsito</td>
 						<td><?php echo round($valorProduccion[42]) ?></td>
 						<td>$<?php echo number_format(round($valorProduccion[42] * $kwQROO * $iva, 2)) ?></td>
-						<td>$<?php echo number_format((($valorProduccion[42] * $kwQROO) - ($valorProduccion[42] * $kwQROO * .15)) * 1.16); ?></td>
+						<td>$
+							<?php 
+								echo number_format((($valorProduccion[42] * $kwQROO) - ($valorProduccion[42] * $kwQROO * .15)) * 1.16); 
+								$ahorroTransito[9] = ($valorProduccion[42] * $kwQROO * $iva) - ((($valorProduccion[42] * $kwQROO) - ($valorProduccion[42] * $kwQROO * .15)) * 1.16);
+								$ahorroMes[9] = $ahorroMes[9] + $ahorroTransito[9];
+							?>
+						</td>
 						<td><?php echo round($valorProduccion[47]) ?></td>
 						<td>$<?php echo number_format(round($valorProduccion[47] * $kwQROO * $iva, 2)) ?></td>
-						<td>$<?php echo number_format((($valorProduccion[47] * $kwQROO) - ($valorProduccion[47] * $kwQROO * .15)) * 1.16); ?></td>
+						<td>$
+							<?php 
+								echo number_format((($valorProduccion[47] * $kwQROO) - ($valorProduccion[47] * $kwQROO * .15)) * 1.16); 
+								$ahorroTransito[10] = ($valorProduccion[47] * $kwQROO * $iva) - ((($valorProduccion[47] * $kwQROO) - ($valorProduccion[47] * $kwQROO * .15)) * 1.16);
+								$ahorroMes[10] = $ahorroMes[10] + $ahorroTransito[10];
+							?>
+						</td>
 						<td><?php echo round($valorProduccion[52]) ?></td>
 						<td>$<?php echo number_format(round($valorProduccion[52] * $kwQROO * $iva, 2)) ?></td>
-						<td>$<?php echo number_format((($valorProduccion[52] * $kwQROO) - ($valorProduccion[52] * $kwQROO * .15)) * 1.16); ?></td>
+						<td>$
+							<?php 
+								echo number_format((($valorProduccion[52] * $kwQROO) - ($valorProduccion[52] * $kwQROO * .15)) * 1.16); 
+								$ahorroTransito[11] = ($valorProduccion[52] * $kwQROO * $iva) - ((($valorProduccion[52] * $kwQROO) - ($valorProduccion[52] * $kwQROO * .15)) * 1.16);
+								$ahorroMes[11] = $ahorroMes[11] + $ahorroTransito[11];
+							?>
+						</td>
 						<td><?php echo round($valorProduccion[57]) ?></td>
 						<td>$<?php echo number_format(round($valorProduccion[57] * $kwQROO * $iva, 2)) ?></td>
-						<td>$<?php echo number_format((($valorProduccion[57] * $kwQROO) - ($valorProduccion[57] * $kwQROO * .15)) * 1.16); ?></td>
+						<td>$
+							<?php 
+								echo number_format((($valorProduccion[57] * $kwQROO) - ($valorProduccion[57] * $kwQROO * .15)) * 1.16); 
+								$ahorroTransito[12] = ($valorProduccion[57] * $kwQROO * $iva) - ((($valorProduccion[57] * $kwQROO) - ($valorProduccion[57] * $kwQROO * .15)) * 1.16);
+								$ahorroMes[12] = $ahorroMes[12] + $ahorroTransito[12];
+							?>
+						</td>
 					</tr>
 					<tr>
 						<td>Fco. de Montejo</td>
@@ -489,7 +720,8 @@ function days_in_month($month, $year)
 								echo number_format((($valorProduccion[41] * $kwQROO) - ($valorProduccion[41] * $kwQROO * .15)) * 1.16); 
 								$ahorroMontejo[9] = ($valorProduccion[41] * $kwQROO * $iva) - ((($valorProduccion[41] * $kwQROO) - ($valorProduccion[41] * $kwQROO * .15)) * 1.16);
 								$ahorroMes[9] = $ahorroMes[9] + $ahorroMontejo[9];
-							?>							</td>
+							?>							
+						</td>
 						<td><?php echo round($valorProduccion[46]) ?></td>
 						<td>$<?php echo number_format(round($valorProduccion[46] * $kwQROO * $iva, 2)) ?></td>
 						<td>$
@@ -497,7 +729,8 @@ function days_in_month($month, $year)
 								echo number_format((($valorProduccion[46] * $kwQROO) - ($valorProduccion[46] * $kwQROO * .15)) * 1.16); 
 								$ahorroMontejo[10] = ($valorProduccion[46] * $kwQROO * $iva) - ((($valorProduccion[46] * $kwQROO) - ($valorProduccion[46] * $kwQROO * .15)) * 1.16);
 								$ahorroMes[10] = $ahorroMes[10] + $ahorroMontejo[10];
-							?>						</td>
+							?>						
+						</td>
 						<td><?php echo round($valorProduccion[51]) ?></td>
 						<td>$<?php echo number_format(round($valorProduccion[51] * $kwQROO * $iva, 2)) ?></td>
 						<td>$
@@ -592,27 +825,30 @@ function days_in_month($month, $year)
 					<tr>
 						<td>Edwiges</td>
 						<?php
-						$number = 1234;
+						$x = 1;
 						for ($i = $mes; $i <= $mes + 11; $i++) {
-							echo ("<td>$ " . number_format($number + $mes) . "</td>");
+							echo ("<td>$ " . number_format($ahorroEdwiges[$x]) . "</td>");
+							$x++;
 						}
 						?>
 					</tr>
 					<tr>
 						<td>Av. Patria</td>
 						<?php
-						$number = 1234;
+						$x = 1;
 						for ($i = $mes; $i <= $mes + 11; $i++) {
-							echo ("<td>$ " . number_format($number + $mes) . "</td>");
+							echo ("<td>$ " . number_format($ahorroPatria[$x]) . "</td>");
+							$x++;
 						}
 						?>
 					</tr>
 					<tr>
 						<td>Tránsito</td>
 						<?php
-						$number = 1234;
+						$x = 1;
 						for ($i = $mes; $i <= $mes + 11; $i++) {
-							echo ("<td>$ " . number_format($number + $mes) . "</td>");
+							echo ("<td>$ " . number_format($ahorroTransito[$x]) . "</td>");
+							$x++;
 						}
 						?>
 					</tr>
@@ -697,8 +933,6 @@ function days_in_month($month, $year)
 			});
 		</script>
 	</div> <!-- /.container de la gráfica-->
-
-
 
 	<!-- Footer -->
 	<footer class="py-5">
